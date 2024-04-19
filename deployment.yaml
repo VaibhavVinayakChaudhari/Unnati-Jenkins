@@ -1,74 +1,81 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: wordpress-mysql
-  labels:
-    app: wordpress
-spec:
-  ports:
-    - port: 3306
-  selector:
-    app: wordpress
-    tier: mysql
-  clusterIP: None
----
+
+
+# Create MYSQL PVC
+
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-pv-claim
-  labels:
-    app: wordpress
+  name: mysqlpvc
 spec:
+  storageClassName: "gp3"
+  volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 20Gi
+      storage: 2Gi
+
 ---
+
+# Create MYSQL Deployment
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: wordpress-mysql
+  creationTimestamp: null
   labels:
-    app: wordpress
+    app: mysql
+  name: mysql
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: wordpress
-      tier: mysql
-  strategy:
-    type: Recreate
+      app: mysql
+  strategy: {}
   template:
     metadata:
+      creationTimestamp: null
       labels:
-        app: wordpress
-        tier: mysql
+        app: mysql
     spec:
       containers:
-      - image: mysql:8.0
+      - image: docker.io/mysql:5.6
         name: mysql
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mysql-pass
-              key: password
-        - name: MYSQL_DATABASE
-          value: wordpress
-        - name: MYSQL_USER
-          value: wordpress
-        - name: MYSQL_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mysql-pass
-              key: password
         ports:
         - containerPort: 3306
-          name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: alexa
+        - name: MYSQL_DATABASE
+          value: verma
         volumeMounts:
-        - name: mysql-persistent-storage
+        - name: mysqlvol 
           mountPath: /var/lib/mysql
       volumes:
-      - name: mysql-persistent-storage
+      - name: mysqlvol
         persistentVolumeClaim:
-          claimName: mysql-pv-claim
+          claimName: mysqlpvc
+status: {}
+
+---
+
+# Create Service for MYSQL Deployment
+
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: mysql
+  name: mysql
+spec:
+  ports:
+  - port: 3306
+    protocol: TCP
+    targetPort: 3306
+  selector:
+    app: mysql
+status:
+  loadBalancer: {}
+
+---
