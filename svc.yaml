@@ -1,87 +1,12 @@
-
-
-
-# Create PVC for Wordpress
-
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: wordpresspvc
-spec:
-  storageClassName: "gp3"
-  volumeMode: Filesystem
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-
----
-
-# Create Wordpress Deployment
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  creationTimestamp: null
-  labels:
-    app: wordpress
-  name: wordpress
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: wordpress
-  strategy: {}
-  template:
-    metadata:
-      creationTimestamp: null
-      labels:
-        app: wordpress
-    spec:
-      containers:
-      - image: docker.io/wordpress
-        name: wordpress
-        ports:
-        - containerPort: 80
-        env:
-        - name: WORDPRESS_DB_HOST
-          value: mysql
-        - name: WORDPRESS_DB_USER
-          value: root
-        - name: WORDPRESS_DB_PASSWORD
-          value: alexa
-        - name: WORDPRESS_DB_NAME
-          value: verma
-        volumeMounts:
-        - name: wordpressvol 
-          mountPath: /var/www/html
-      volumes:
-      - name: wordpressvol
-        persistentVolumeClaim:
-          claimName: wordpresspvc
-status: {}
-
----
-
-# Create Service for Wordpress Deployment
-
 apiVersion: v1
 kind: Service
 metadata:
-  creationTimestamp: null
-  labels:
-    app: wordpress
-  name: wordpress
+  name: flaskdemo-service
 spec:
-  ports:
-  - port: 80
-    protocol: TCP
-    targetPort: 80
   selector:
-    app: wordpress
+    app: flaskdemo
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
   type: NodePort
-status:
-  loadBalancer: {}
-
----
