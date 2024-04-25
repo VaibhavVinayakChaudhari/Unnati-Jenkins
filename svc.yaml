@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: flaskdemo-service
+  name: unnati
 spec:
   selector:
-    app: flaskdemo
+    app: unnati
   ports:
     - protocol: TCP
       port: 80
