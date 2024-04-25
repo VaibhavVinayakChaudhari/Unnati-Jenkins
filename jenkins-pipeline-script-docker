@@ -1,1 +1,28 @@
 
+pipeline {
+    agent any
+    
+    stages {
+        stage('Git Clone') {
+            steps {
+                git branch: 'main', url: 'https://github.com/VaibhavVinayakChaudhari/Unnati-jenkins'        
+            }
+        }
+        
+        stage('Docker build') {
+            steps {
+                sh 'docker build -t vaibhav1405/unnati:$BUILD_NUMBER .' 
+            }
+        }
+        
+        stage('Docker push') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'dockerhub') {
+                        sh 'docker push vaibhav1405/unnati:$BUILD_NUMBER'
+                    }
+                }
+            }
+        }     
+    }
+}
