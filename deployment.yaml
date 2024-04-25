@@ -1,1 +1,24 @@
-
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: unnati
+  name: unnati
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: unnati
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: unnati
+    spec:
+      containers:
+      - image: docker.io/httpd
+        name: unnati
+        resources: {}
+status: {}
