@@ -1,11 +1,11 @@
 
 pipeline {
-    agent any
+    agent any   #add label if you want remote docker
     
     stages {
         stage('Git Clone') {
             steps {
-                git branch: 'main', url: 'https://github.com/VaibhavVinayakChaudhari/Unnati-jenkins'        
+                git branch: 'main', url: 'https://github.com/VaibhavVinayakChaudhari/Unnati-Jenkins'        
             }
         }
         
