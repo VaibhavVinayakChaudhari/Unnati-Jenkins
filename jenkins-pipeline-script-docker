@@ -23,5 +23,13 @@ pipeline {
                 }
             }
         }     
+        stage('Docker run') {
+            steps {
+                script {
+                    sh 'docker run -d vaibhav1405/unnati:$BUILD_NUMBER'
+                    
+                }
+            }
+        } 
     }
 }
