@@ -1,6 +1,5 @@
-
 pipeline {
-    agent any   #add label if you want remote docker
+    agent any   //add label if you want remote docker
     
     stages {
         stage('Git Clone') {
