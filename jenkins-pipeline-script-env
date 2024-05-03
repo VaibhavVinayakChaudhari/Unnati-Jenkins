@@ -1,0 +1,19 @@
+pipeline {
+    agent any
+    
+    environment {
+        // Define environment variables
+        CLASS = 'KUCL'
+    }
+    
+    stages {
+        stage('Print Environment Variable') {
+            steps {
+                // Print the value of the environment variable
+                script {
+                    echo "Hello Student of ${env.CLASS}"
+                }
+            }
+        }
+    }
+}
