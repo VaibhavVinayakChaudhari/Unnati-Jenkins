@@ -5,7 +5,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main', url: 'https://github.com/https://github.com/VaibhavVinayakChaudhari/Unnati-Jenkins'
+                git branch: 'main', url: 'https://github.com/VaibhavVinayakChaudhari/Unnati-Jenkins'
             }
         }
         stage('Terraform Init') {
