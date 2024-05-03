@@ -1,0 +1,24 @@
+pipeline {
+    agent {
+        label 'agent01'
+    }
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main', url: 'https://github.com/https://github.com/VaibhavVinayakChaudhari/Unnati-Jenkins'
+            }
+        }
+        stage('Terraform Init') {
+            steps {
+                sh 'terraform init'
+            }
+        }
+        stage('Terraform Apply') {
+            steps {
+                withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'AWS', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                sh 'terraform apply --auto-approve'
+                }
+            }
+        }
+    }
+}
